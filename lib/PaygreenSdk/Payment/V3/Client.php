@@ -12,6 +12,7 @@ use Paygreen\Sdk\Payment\V3\Model\PaymentConfigInterface;
 use Paygreen\Sdk\Payment\V3\Model\PaymentOrder;
 use Paygreen\Sdk\Payment\V3\Model\Shop;
 use Paygreen\Sdk\Payment\V3\Request\Authentication\AuthenticationRequest;
+use Paygreen\Sdk\Payment\V3\Request\Balance\BalanceRequest;
 use Paygreen\Sdk\Payment\V3\Request\Buyer\BuyerRequest;
 use Paygreen\Sdk\Payment\V3\Request\Event\EventRequest;
 use Paygreen\Sdk\Payment\V3\Request\Instrument\InstrumentRequest;
@@ -808,6 +809,25 @@ class Client extends \Paygreen\Sdk\Core\Client
             $operationId,
             $operation
         );
+
+        $this->setLastRequest($request);
+
+        $response = $this->sendRequest($request);
+        $this->setLastResponse($response);
+
+        return $response;
+    }
+
+    /***
+     * @param string $shopId
+     *
+     * @throws Exception
+     *
+     * @return ResponseInterface
+     */
+    public function getBalance($shopId = null)
+    {
+        $request = (new BalanceRequest($this->requestFactory, $this->environment))->getGetRequest($shopId);
 
         $this->setLastRequest($request);
 
